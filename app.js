@@ -163,25 +163,32 @@ function addDays(dateString, dias) {
   return date.toISOString().split("T")[0];
 }
 
-function calculateStatus(dataTeste) {
+function calculateStatus(dataTeste, aprovado) {
+  if ((aprovado || "").toUpperCase() === "REPROVADO") {
+    return {
+      dueDate: dataTeste ? formatDate(dataTeste) : "",
+      status: "MANUTENÇÃO",
+      className: "status-danger",
+    };
+  }
   if (!dataTeste) {
     return { dueDate: "", status: "PENDENTE", className: "status-danger" };
   }
-  const dueDate = addDays(dataTeste, 60);
+  const dueDate = formatDate(addDays(dataTeste, 60));
   const hoje = new Date();
-  const venc = new Date(dueDate);
+  const venc = new Date(addDays(dataTeste, 60));
   const diffDias = Math.ceil((venc - hoje) / (1000 * 60 * 60 * 24));
   if (diffDias < 0) {
     return { dueDate, status: "VENCIDO", className: "status-danger" };
   }
   if (diffDias <= 7) {
-    return { dueDate, status: "ALERTA 7 DIAS", className: "status-warning" };
+    return { dueDate, status: "ALERTA DE VENCIMENTO", className: "status-warning" };
   }
   return { dueDate, status: "EM DIA", className: "status-ok" };
 }
 
-function createStatusCell(dataTeste) {
-  const { status, className } = calculateStatus(dataTeste);
+function createStatusCell(dataTeste, aprovado) {
+  const { status, className } = calculateStatus(dataTeste, aprovado);
   return `<span class="status-chip ${className}">${status}</span>`;
 }
 
@@ -191,8 +198,8 @@ function renderFrota() {
   frotaData.forEach((item, index) => {
     const text = `${item.identificador} ${item.placa} ${item.usuario} ${item.motorista}`.toLowerCase();
     if (search && !text.includes(search)) return;
-    const statusCell = createStatusCell(item.dataTeste);
-    const dueDate = item.dataTeste ? formatDate(addDays(item.dataTeste, 60)) : "";
+    const { status, className, dueDate } = calculateStatus(item.dataTeste, item.aprovado);
+    const statusCell = `<span class="status-chip ${className}">${status}</span>`;
     elements.frotaBody.innerHTML += `
       <tr>
         <td>${index + 1}</td>
@@ -228,8 +235,8 @@ function renderCarretas() {
   carretasData.forEach((item, index) => {
     const text = `${item.placa} ${item.carroceria} ${item.usuario}`.toLowerCase();
     if (search && !text.includes(search)) return;
-    const statusCell = createStatusCell(item.dataTeste);
-    const dueDate = item.dataTeste ? formatDate(addDays(item.dataTeste, 60)) : "";
+    const { status, className, dueDate } = calculateStatus(item.dataTeste, item.aprovado);
+    const statusCell = `<span class="status-chip ${className}">${status}</span>`;
     elements.carretasBody.innerHTML += `
       <tr>
         <td>${index + 1}</td>
@@ -256,8 +263,8 @@ function renderAgregados() {
   agregadosData.forEach((item, index) => {
     const text = `${item.identificador} ${item.placa} ${item.usuario} ${item.motorista}`.toLowerCase();
     if (search && !text.includes(search)) return;
-    const statusCell = createStatusCell(item.dataTeste);
-    const dueDate = item.dataTeste ? formatDate(addDays(item.dataTeste, 60)) : "";
+    const { status, className, dueDate } = calculateStatus(item.dataTeste, item.aprovado);
+    const statusCell = `<span class="status-chip ${className}">${status}</span>`;
     elements.agregadosBody.innerHTML += `
       <tr>
         <td>${index + 1}</td>
