@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Checklist de Vencimento - Sistema</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand">Checklist de Vencimento</div>
+      <nav class="menu">
+        <button class="menu-button active" data-tab="frotaTab">Frota</button>
+        <button class="menu-button" data-tab="carretasTab">Carretas</button>
+        <button class="menu-button" data-tab="agregadosTab">Agregados</button>
+        <button class="menu-button" data-tab="relatoriosTab">Relatórios</button>
+      </nav>
+      <button class="logout-btn" id="logoutBtn">Sair</button>
+    </aside>
+
+    <div class="main-content">
+      <header class="topbar">
+        <div class="top-title">Painel Administrativo</div>
+        <div class="user-info" id="userInfo">Não autenticado</div>
+      </header>
+
+      <main>
+        <section class="content">
+          <article class="tab-panel active" id="frotaTab">
+            <div class="panel-header">
+              <h2>Frota</h2>
+              <div class="filters">
+                <input id="searchFrota" type="text" placeholder="Buscar por placa, identificador ou usuário" />
+                <button id="refreshFrota">Atualizar</button>
+                <button class="add-btn" id="addFrota">Adicionar</button>
+              </div>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Identificador</th>
+                    <th>Placas</th>
+                    <th>ID Tecnologia</th>
+                    <th>Data Teste</th>
+                    <th>Vencimento</th>
+                    <th>Status</th>
+                    <th>Teclado</th>
+                    <th>Sirene</th>
+                    <th>Deseng.</th>
+                    <th>Trava</th>
+                    <th>Sensor Baú</th>
+                    <th>Porta Carona</th>
+                    <th>Porta Motorista</th>
+                    <th>Bloqueio</th>
+                    <th>Pânico</th>
+                    <th>Violação</th>
+                    <th>Aprovado</th>
+                    <th>Usuário</th>
+                    <th>Motorista</th>
+                    <th>Contato</th>
+                    <th>Ações</th>
+                  </tr>
+                </thead>
+                <tbody id="frotaBody"></tbody>
+              </table>
+            </div>
+          </article>
+
+          <article class="tab-panel" id="carretasTab">
+            <div class="panel-header">
+              <h2>Carretas</h2>
+              <div class="filters">
+                <input id="searchCarretas" type="text" placeholder="Buscar por placa, carroceria ou usuário" />
+                <button id="refreshCarretas">Atualizar</button>
+                <button class="add-btn" id="addCarretas">Adicionar</button>
+              </div>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Placas</th>
+                    <th>Carroceria</th>
+                    <th>Venc.</th>
+                    <th>Data Teste</th>
+                    <th>Teste OK</th>
+                    <th>Venc. Teste</th>
+                    <th>Trava de Baú</th>
+                    <th>Sensor de Baú</th>
+                    <th>Aprovado</th>
+                    <th>Usuário</th>
+                    <th>Observações</th>
+                    <th>Ações</th>
+                  </tr>
+                </thead>
+                <tbody id="carretasBody"></tbody>
+              </table>
+            </div>
+          </article>
+
+          <article class="tab-panel" id="agregadosTab">
+            <div class="panel-header">
+              <h2>Agregados</h2>
+              <div class="filters">
+                <input id="searchAgregados" type="text" placeholder="Buscar por placa, identificador ou usuário" />
+                <button id="refreshAgregados">Atualizar</button>
+                <button class="add-btn" id="addAgregados">Adicionar</button>
+              </div>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Identificador</th>
+                    <th>Placas</th>
+                    <th>ID Tecnologia</th>
+                    <th>Data Teste</th>
+                    <th>Vencimento</th>
+                    <th>Venc. Teste</th>
+                    <th>Teclado</th>
+                    <th>Sirene</th>
+                    <th>Deseng.</th>
+                    <th>Trava</th>
+                    <th>Sensor Baú</th>
+                    <th>Porta Carona</th>
+                    <th>Porta Motorista</th>
+                    <th>Bloqueio</th>
+                    <th>Pânico</th>
+                    <th>Violação</th>
+                    <th>Aprovado</th>
+                    <th>Usuário</th>
+                    <th>Motorista</th>
+                    <th>Contato</th>
+                    <th>Ações</th>
+                  </tr>
+                </thead>
+                <tbody id="agregadosBody"></tbody>
+              </table>
+            </div>
+          </article>
+
+          <article class="tab-panel" id="relatoriosTab">
+            <div class="panel-header">
+              <h2>Relatórios e Indicadores</h2>
+            </div>
+            <div class="report-grid">
+              <div class="report-card">
+                <h3>Checklist realizados no mês</h3>
+                <p id="totalRealizados">0</p>
+              </div>
+              <div class="report-card">
+                <h3>Checklist reprovados no mês</h3>
+                <p id="totalReprovados">0</p>
+              </div>
+              <div class="report-card">
+                <h3>Taxa de reprovação</h3>
+                <p id="taxaReprovacao">0%</p>
+              </div>
+              <div class="report-card">
+                <h3>Registros com alerta</h3>
+                <p id="totalAlertas">0</p>
+              </div>
+            </div>
+          </article>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <div class="modal hidden" id="editModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 id="modalTitle">Editar registro</h3>
+        <p class="modal-note">Use este formulário para adicionar ou atualizar dados da placa. Os campos podem ser ajustados no momento.</p>
+      </div>
+      <form id="editForm">
+        <div class="form-grid" id="editFields"></div>
+        <div class="modal-actions">
+          <button type="button" id="cancelEdit">Cancelar</button>
+          <button type="submit">Confirmar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
