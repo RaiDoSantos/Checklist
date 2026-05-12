@@ -4,7 +4,7 @@ import { getFirestore, doc, setDoc, getDoc } from 'https://www.gstatic.com/fireb
 
 // 2. Configuração do seu Firebase
 const firebaseConfig = {
-    apiKey: "AIzaSyCf_HbMhlkISxVs_tYpwd-9yQvX1dGw8o",
+    apiKey: "AIzaSyCf_HbSMhLkISxVs_tYpwd-9yQVX1dGw0o",
     authDomain: "bdd-checklist.firebaseapp.com",
     projectId: "bdd-checklist",
     storageBucket: "bdd-checklist.appspot.com",
