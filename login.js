@@ -1,4 +1,4 @@
-const adminCredentials = { user: "rai", password: "admin" };
+const adminCredentials = { user: "Rai", password: "R@iedu77" };
 
 
 const loginButton = document.getElementById("loginButton");

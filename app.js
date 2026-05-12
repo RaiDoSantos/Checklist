@@ -1,8 +1,36 @@
-﻿const adminCredentials = { user: "admin", password: "admin123" };
+﻿const adminCredentials = { user: "Rai", password: "R@iedu77" };
 let loggedInUser = null;
 let activeEdit = null;
 
-const frotaData = [
+const STORAGE_KEYS = {
+  frota: "checklist_frota",
+  carretas: "checklist_carretas",
+  agregados: "checklist_agregados",
+};
+
+function loadData(key, defaultData) {
+  const raw = localStorage.getItem(key);
+  if (!raw) return defaultData;
+  try {
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) ? parsed : defaultData;
+  } catch (error) {
+    console.warn(`Falha ao carregar ${key} do localStorage:`, error);
+    return defaultData;
+  }
+}
+
+function saveData(key, data) {
+  localStorage.setItem(key, JSON.stringify(data));
+}
+
+function persistDataset(type) {
+  if (type === "frota") saveData(STORAGE_KEYS.frota, frotaData);
+  if (type === "carretas") saveData(STORAGE_KEYS.carretas, carretasData);
+  if (type === "agregados") saveData(STORAGE_KEYS.agregados, agregadosData);
+}
+
+const frotaData = loadData(STORAGE_KEYS.frota, [
   {
     identificador: "AGRE-TOCO",
     placa: "AKQ8670",
@@ -43,9 +71,9 @@ const frotaData = [
     motorista: "Pedro Lemos da Rosa Filho",
     contato: "+55 55 8462-2125",
   },
-];
+]);
 
-const carretasData = [
+const carretasData = loadData(STORAGE_KEYS.carretas, [
   {
     placa: "JXA0649",
     carroceria: "BAU",
@@ -82,9 +110,9 @@ const carretasData = [
     usuario: "RAI",
     observacoes: "",
   },
-];
+]);
 
-const agregadosData = [
+const agregadosData = loadData(STORAGE_KEYS.agregados, [
   {
     identificador: "AGRE-TOCO",
     placa: "BQH964",
@@ -125,7 +153,7 @@ const agregadosData = [
     motorista: "Claudio John",
     contato: "+55 54 9934-8994",
   },
-];
+]);
 
 const elements = {
   frotaBody: document.getElementById("frotaBody"),
@@ -378,6 +406,7 @@ document.getElementById("editForm").addEventListener("submit", (event) => {
   } else {
     dataSet[activeEdit.index] = { ...dataSet[activeEdit.index], ...updated };
   }
+  persistDataset(activeEdit.type);
   elements.editModal.classList.add("hidden");
   activeEdit = null;
   renderAll();
