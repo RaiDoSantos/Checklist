@@ -1,36 +1,55 @@
-﻿const adminCredentials = { user: "Rai", password: "R@iedu77" };
+﻿// 1. Importar os módulos necessários do Firebase
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js';
+import { getFirestore, doc, setDoc, getDoc } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js';
+
+// 2. Configuração do seu Firebase
+const firebaseConfig = {
+    apiKey: "AIzaSyCf_HbMhlkISxVs_tYpwd-9yQvX1dGw8o",
+    authDomain: "bdd-checklist.firebaseapp.com",
+    projectId: "bdd-checklist",
+    storageBucket: "bdd-checklist.appspot.com",
+    messagingSenderId: "981472161274",
+    appId: "1:981472161274:web:8273782dfcd1a35f0fc8a43",
+    measurementId: "G-18RERSM3L7"
+};
+
+// 3. Inicializar o Firebase e o Banco de Dados
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+// === FUNÇÕES PARA SALVAR E CARREGAR DADOS NO FIREBASE ===
+async function saveDataToFirebase() {
+    try {
+        await setDoc(doc(db, "checklist", "data"), {
+            frota: frotaData,
+            carretas: carretasData,
+            agregados: agregadosData
+        });
+        console.log("Dados salvos no Firebase");
+    } catch (e) {
+        console.error("Erro ao salvar:", e);
+    }
+}
+
+async function loadDataFromFirebase() {
+    try {
+        const docSnap = await getDoc(doc(db, "checklist", "data"));
+        if (docSnap.exists()) {
+            const data = docSnap.data();
+            frotaData = data.frota || frotaData;
+            carretasData = data.carretas || carretasData;
+            agregadosData = data.agregados || agregadosData;
+        }
+    } catch (e) {
+        console.error("Erro ao carregar:", e);
+    }
+}
+
+const adminCredentials = { user: "Rai", password: "R@iedu77" };
 let loggedInUser = null;
 let activeEdit = null;
 
-const STORAGE_KEYS = {
-  frota: "checklist_frota",
-  carretas: "checklist_carretas",
-  agregados: "checklist_agregados",
-};
-
-function loadData(key, defaultData) {
-  const raw = localStorage.getItem(key);
-  if (!raw) return defaultData;
-  try {
-    const parsed = JSON.parse(raw);
-    return Array.isArray(parsed) ? parsed : defaultData;
-  } catch (error) {
-    console.warn(`Falha ao carregar ${key} do localStorage:`, error);
-    return defaultData;
-  }
-}
-
-function saveData(key, data) {
-  localStorage.setItem(key, JSON.stringify(data));
-}
-
-function persistDataset(type) {
-  if (type === "frota") saveData(STORAGE_KEYS.frota, frotaData);
-  if (type === "carretas") saveData(STORAGE_KEYS.carretas, carretasData);
-  if (type === "agregados") saveData(STORAGE_KEYS.agregados, agregadosData);
-}
-
-const frotaData = loadData(STORAGE_KEYS.frota, [
+let frotaData = [
   {
     identificador: "AGRE-TOCO",
     placa: "AKQ8670",
@@ -71,9 +90,9 @@ const frotaData = loadData(STORAGE_KEYS.frota, [
     motorista: "Pedro Lemos da Rosa Filho",
     contato: "+55 55 8462-2125",
   },
-]);
+];
 
-const carretasData = loadData(STORAGE_KEYS.carretas, [
+let carretasData = [
   {
     placa: "JXA0649",
     carroceria: "BAU",
@@ -110,9 +129,9 @@ const carretasData = loadData(STORAGE_KEYS.carretas, [
     usuario: "RAI",
     observacoes: "",
   },
-]);
+];
 
-const agregadosData = loadData(STORAGE_KEYS.agregados, [
+let agregadosData = [
   {
     identificador: "AGRE-TOCO",
     placa: "BQH964",
@@ -153,7 +172,7 @@ const agregadosData = loadData(STORAGE_KEYS.agregados, [
     motorista: "Claudio John",
     contato: "+55 54 9934-8994",
   },
-]);
+];
 
 const elements = {
   frotaBody: document.getElementById("frotaBody"),
@@ -406,7 +425,7 @@ document.getElementById("editForm").addEventListener("submit", (event) => {
   } else {
     dataSet[activeEdit.index] = { ...dataSet[activeEdit.index], ...updated };
   }
-  persistDataset(activeEdit.type);
+  saveDataToFirebase();
   elements.editModal.classList.add("hidden");
   activeEdit = null;
   renderAll();
@@ -571,6 +590,11 @@ function renderAll() {
   renderAgregados();
 }
 
-synchronizeUser();
-renderAll();
-updateSummary();
+async function initApp() {
+  synchronizeUser();
+  await loadDataFromFirebase();
+  renderAll();
+  updateSummary();
+}
+
+initApp();
