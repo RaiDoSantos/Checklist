@@ -1,11 +1,7 @@
-﻿// Import the functions you need from the SDKs you need
+﻿
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
 
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
   apiKey: "AIzaSyCf_HbSMhLkISxVs_tYpwd-9yQVX1dGw0o",
   authDomain: "bdd-checklist.firebaseapp.com",
@@ -16,12 +12,9 @@ const firebaseConfig = {
   measurementId: "G-K62P4FELKQ"
 };
 
-// Initialize Firebase
+// isso aqui foi trocado GIT DEIXA EU COMITAR
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
-
-// 3. Inicializar o Firebase e o Banco de Dados
-const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 // === FUNÇÕES PARA SALVAR E CARREGAR DADOS NO FIREBASE ===
