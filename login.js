@@ -1,22 +1,30 @@
-const adminCredentials = { user: "Rai", password: "R@iedu77" };
-
+import { auth } from "./firebase-config.js";
+import { signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js";
 
 const loginButton = document.getElementById("loginButton");
 const adminUser = document.getElementById("adminUser");
 const adminPassword = document.getElementById("adminPassword");
 
-if (localStorage.getItem("adminLoggedIn") === "true") {
-  window.location.href = "index.html";
-}
-
-loginButton.addEventListener("click", () => {
-  const user = adminUser.value.trim();
-  const password = adminPassword.value.trim();
-  if (user === adminCredentials.user && password === adminCredentials.password) {
-    localStorage.setItem("adminLoggedIn", "true");
-    localStorage.setItem("adminUser", user);
+onAuthStateChanged(auth, (user) => {
+  if (user) {
     window.location.href = "index.html";
-  } else {
-    alert("Credenciais inválidas.");
+  }
+});
+
+loginButton.addEventListener("click", async () => {
+  const email = adminUser.value.trim();
+  const password = adminPassword.value.trim();
+
+  if (!email || !password) {
+    alert("Preencha email e senha.");
+    return;
+  }
+
+  try {
+    await signInWithEmailAndPassword(auth, email, password);
+    window.location.href = "index.html";
+  } catch (error) {
+    console.error("Erro de login:", error);
+    alert("Credenciais inválidas ou usuário não encontrado.");
   }
 });

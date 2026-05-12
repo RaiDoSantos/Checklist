@@ -9,13 +9,13 @@
 <body class="login-page">
   <div class="login-box">
     <h2>Login de Administrador</h2>
-    <label for="adminUser">Usuário</label>
-    <input id="adminUser" type="text" placeholder="admin" value="admin" />
+    <label for="adminUser">Email</label>
+    <input id="adminUser" type="email" placeholder="admin@exemplo.com" autocomplete="username" />
     <label for="adminPassword">Senha</label>
-    <input id="adminPassword" type="password" placeholder="Senha" />
+    <input id="adminPassword" type="password" placeholder="Senha" autocomplete="current-password" />
     <button id="loginButton">Entrar</button>
-    <p class="login-note">Apenas administradores podem acessar o sistema.</p>
+    <p class="login-note">Use um usuário criado no Firebase Authentication.</p>
   </div>
-  <script src="login.js"></script>
+  <script type="module" src="login.js"></script>
 </body>
 </html>

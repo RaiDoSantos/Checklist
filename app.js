@@ -1,34 +1,24 @@
 ﻿
-import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyCf_HbSMhLkISxVs_tYpwd-9yQVX1dGw0o",
-  authDomain: "bdd-checklist.firebaseapp.com",
-  projectId: "bdd-checklist",
-  storageBucket: "bdd-checklist.firebasestorage.app",
-  messagingSenderId: "981472161274",
-  appId: "1:981472161274:web:931c35b8be30324f0fc843",
-  measurementId: "G-K62P4FELKQ"
-};
-
-// isso aqui foi trocado GIT DEIXA EU COMITAR
-const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
-const db = getFirestore(app);
+import { auth, db } from "./firebase-config.js";
+import {
+  doc,
+  getDoc,
+  setDoc,
+} from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js";
 
 // === FUNÇÕES PARA SALVAR E CARREGAR DADOS NO FIREBASE ===
 async function saveDataToFirebase() {
-    try {
-        await setDoc(doc(db, "checklist", "data"), {
-            frota: frotaData,
-            carretas: carretasData,
-            agregados: agregadosData
-        });
-        console.log("Dados salvos no Firebase");
-    } catch (e) {
-        console.error("Erro ao salvar:", e);
-    }
+  try {
+    await setDoc(doc(db, "checklist", "data"), {
+      frota: frotaData,
+      carretas: carretasData,
+      agregados: agregadosData,
+    });
+    console.log("Dados salvos no Firebase");
+  } catch (e) {
+    console.error("Erro ao salvar:", e);
+  }
 }
 
 async function loadDataFromFirebase() {
@@ -45,7 +35,6 @@ async function loadDataFromFirebase() {
     }
 }
 
-const adminCredentials = { user: "Rai", password: "R@iedu77" };
 let loggedInUser = null;
 let activeEdit = null;
 
@@ -568,19 +557,29 @@ document.getElementById("addFrota").addEventListener("click", () => openAddModal
 document.getElementById("addCarretas").addEventListener("click", () => openAddModal("carretas"));
 document.getElementById("addAgregados").addEventListener("click", () => openAddModal("agregados"));
 
-function synchronizeUser() {
-  if (localStorage.getItem("adminLoggedIn") !== "true") {
-    window.location.href = "login.html";
-    return;
-  }
-  loggedInUser = localStorage.getItem("adminUser") || "admin";
-  elements.userInfo.textContent = `Administrador: ${loggedInUser}`;
-  elements.logoutBtn.hidden = false;
+function setupAuth() {
+  onAuthStateChanged(auth, async (user) => {
+    if (!user) {
+      window.location.href = "login.html";
+      return;
+    }
+
+    loggedInUser = user.email || user.displayName || "admin";
+    elements.userInfo.textContent = `Administrador: ${loggedInUser}`;
+    elements.logoutBtn.hidden = false;
+
+    await loadDataFromFirebase();
+    renderAll();
+    updateSummary();
+  });
 }
 
-document.getElementById("logoutBtn").addEventListener("click", () => {
-  localStorage.removeItem("adminLoggedIn");
-  localStorage.removeItem("adminUser");
+document.getElementById("logoutBtn").addEventListener("click", async () => {
+  try {
+    await signOut(auth);
+  } catch (error) {
+    console.error("Erro ao sair:", error);
+  }
   window.location.href = "login.html";
 });
 
@@ -590,11 +589,4 @@ function renderAll() {
   renderAgregados();
 }
 
-async function initApp() {
-  synchronizeUser();
-  await loadDataFromFirebase();
-  renderAll();
-  updateSummary();
-}
-
-initApp();
+setupAuth();
