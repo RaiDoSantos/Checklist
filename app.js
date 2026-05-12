@@ -1,17 +1,24 @@
-﻿// 1. Importar os módulos necessários do Firebase
-import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js';
-import { getFirestore, doc, setDoc, getDoc } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js';
+﻿// Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
 
-// 2. Configuração do seu Firebase
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-    apiKey: "AIzaSyCf_HbSMhLkISxVs_tYpwd-9yQVX1dGw0o",
-    authDomain: "bdd-checklist.firebaseapp.com",
-    projectId: "bdd-checklist",
-    storageBucket: "bdd-checklist.appspot.com",
-    messagingSenderId: "981472161274",
-    appId: "1:981472161274:web:8273782dfcd1a35f0fc8a43",
-    measurementId: "G-18RERSM3L7"
+  apiKey: "AIzaSyCf_HbSMhLkISxVs_tYpwd-9yQVX1dGw0o",
+  authDomain: "bdd-checklist.firebaseapp.com",
+  projectId: "bdd-checklist",
+  storageBucket: "bdd-checklist.firebasestorage.app",
+  messagingSenderId: "981472161274",
+  appId: "1:981472161274:web:931c35b8be30324f0fc843",
+  measurementId: "G-K62P4FELKQ"
 };
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
 
 // 3. Inicializar o Firebase e o Banco de Dados
 const app = initializeApp(firebaseConfig);
