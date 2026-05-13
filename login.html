@@ -3,16 +3,17 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Login - Checklist de Vencimento</title>
+  <title>Login — Controle Checklist</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body class="login-page">
   <div class="login-box">
     <h2>Login de Administrador</h2>
-    <label for="adminUser">Email</label>
+    <label for="adminUser">E-mail</label>
     <input id="adminUser" type="email" placeholder="admin@exemplo.com" autocomplete="username" />
     <label for="adminPassword">Senha</label>
     <input id="adminPassword" type="password" placeholder="Senha" autocomplete="current-password" />
+    <p id="loginError" class="login-error" hidden></p>
     <button id="loginButton">Entrar</button>
     <p class="login-note">Use um usuário criado no Firebase Authentication.</p>
   </div>

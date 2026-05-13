@@ -249,19 +249,45 @@ tbody tr:hover {
   background: #c0392b;
 }
 
+td:has(.edit-btn) {
+  white-space: nowrap;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+button.edit-btn,
+button.delete-btn {
+  border: none;
+  border-radius: 12px;
+  padding: 8px 14px;
+  cursor: pointer;
+  font-size: 0.88rem;
+  font-weight: 600;
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
 button.edit-btn {
   background: #2563eb;
   color: white;
-  border: none;
-  border-radius: 12px;
-  padding: 10px 14px;
-  cursor: pointer;
-  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+button.delete-btn {
+  background: var(--danger);
+  color: white;
 }
 
 button.edit-btn:hover {
   transform: translateY(-1px);
   background: #1d4ed8;
+}
+
+button.delete-btn:hover {
+  transform: translateY(-1px);
+  background: #a93226;
 }
 
 .report-grid {
@@ -371,6 +397,16 @@ button.edit-btn:hover {
   padding: 14px 16px;
   border-radius: 14px;
   cursor: pointer;
+}
+
+.login-error {
+  margin: 12px 0 0;
+  padding: 10px 14px;
+  background: #fdecea;
+  color: var(--danger);
+  border: 1px solid #f5c6c2;
+  border-radius: 10px;
+  font-size: 0.92rem;
 }
 
 .login-note {
